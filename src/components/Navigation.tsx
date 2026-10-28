@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { ArrowRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE_CONTENT } from "@/data/siteContent";
@@ -113,7 +114,7 @@ export default function Navigation() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
           <a href="#hero" className="flex items-center gap-3" aria-label="Montra home">
-            <img src="/logo.png" alt="Montra logo" className="h-9 w-9 object-contain" />
+            <Image src="/logo.png" alt="Montra logo" width={36} height={36} className="h-9 w-9 object-contain" />
             <span className="font-heading text-xl font-bold tracking-wider" style={{ fontFamily: "var(--font-heading)" }}>
               {SITE_CONTENT.brand.name}
             </span>
@@ -141,7 +142,7 @@ export default function Navigation() {
             className="flex items-center gap-3"
             aria-label="Montra home"
           >
-            <img src="/logo.png" alt="Montra logo" className="h-9 w-9 object-contain" />
+            <Image src="/logo.png" alt="Montra logo" width={36} height={36} className="h-9 w-9 object-contain" />
             <span className="font-heading text-xl font-bold tracking-wider" style={{ fontFamily: "var(--font-heading)" }}>
               {SITE_CONTENT.brand.name}
             </span>

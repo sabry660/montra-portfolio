@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ArrowRight, X } from "lucide-react";
 import { SITE_CONTENT } from "@/data/siteContent";
@@ -116,9 +117,12 @@ export default function Hero() {
             className="inline-flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/5 shadow-[0_0_30px_rgba(255,77,0,0.12)] ring-1 ring-white/10 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:h-32 md:w-32"
             aria-label="Open Montra logo"
           >
-            <img
+            <Image
               src="/logo.png"
               alt="Montra Logo"
+              width={512}
+              height={512}
+              priority
               className="h-full w-full rounded-full object-cover object-center"
             />
           </button>
@@ -169,9 +173,11 @@ export default function Hero() {
             >
               <X size={32} />
             </button>
-            <img
+            <Image
               src="/logo.png"
               alt="Montra Logo"
+              width={512}
+              height={512}
               className="max-h-[80vh] max-w-full rounded-lg object-contain"
             />
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useCallback } from "react";
+import Image from "next/image";
 import { Github, Linkedin, Twitter, Instagram, Mail, MessageCircle, Facebook } from "lucide-react";
 import gsap from "gsap";
 import { SITE_CONTENT } from "@/data/siteContent";
@@ -96,7 +97,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
         <div className="mb-12 text-center lg:text-left">
           <div className="mb-4 flex items-center justify-center gap-3 lg:justify-start">
-            <img src="/logo.png" alt="Montra logo" className="h-11 w-11 object-contain" />
+            <Image src="/logo.png" alt="Montra logo" width={44} height={44} className="h-11 w-11 object-contain" />
             <h2 className="text-2xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>
               {SITE_CONTENT.brand.name}
             </h2>

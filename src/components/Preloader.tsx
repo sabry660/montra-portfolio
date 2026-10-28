@@ -4,36 +4,38 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 interface PreloaderProps {
+  ready: boolean;
   onComplete: () => void;
 }
 
-export default function Preloader({ onComplete }: PreloaderProps) {
+export default function Preloader({ ready, onComplete }: PreloaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef({ val: 0 });
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const obj = { val: 0 };
-
-    const tl = gsap.timeline({
+    const timeline = gsap.timeline({
       onComplete: () => {
-        gsap.to(containerRef.current, {
+        if (ready) {
+          gsap.to(containerRef.current, {
           opacity: 0,
           scale: 0.95,
           duration: 0.5,
           ease: "power2.inOut",
           onComplete,
-        });
+          });
+        }
       },
     });
 
-    tl.to(obj, {
-      val: 100,
-      duration: 1.5,
+    timeline.to(progressRef.current, {
+      val: ready ? 100 : 90,
+      duration: ready ? 0.3 : 1.5,
       ease: "power2.inOut",
       onUpdate: () => {
-        const v = Math.round(obj.val);
+        const v = Math.round(progressRef.current.val);
         setCount(v);
         if (barRef.current) {
           barRef.current.style.width = `${v}%`;
@@ -42,9 +44,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     });
 
     return () => {
-      tl.kill();
+      timeline.kill();
     };
-  }, [onComplete]);
+  }, [ready, onComplete]);
 
   return (
     <div ref={containerRef} className="preloader">

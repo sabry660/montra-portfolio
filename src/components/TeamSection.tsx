@@ -1,12 +1,8 @@
 "use client";
 
-import { useEffect, useRef, memo } from "react";
+import { memo } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Github, Linkedin, Twitter } from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const TEAM = [
   {
@@ -45,7 +41,7 @@ const TeamCard = memo(function TeamCard({
   member: (typeof TEAM)[0];
 }) {
   return (
-    <div className="team-card">
+    <div className="team-card" data-reveal="up">
       <div className="team-card-image">
         <Image
           src={member.image}
@@ -53,7 +49,6 @@ const TeamCard = memo(function TeamCard({
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover object-top"
-          unoptimized
         />
       </div>
       <div className="team-card-overlay">
@@ -82,35 +77,8 @@ const TeamCard = memo(function TeamCard({
 });
 
 export default function TeamSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!gridRef.current || !sectionRef.current) return;
-
-    const cards = gridRef.current.querySelectorAll(".team-card");
-
-    const ctx = gsap.context(() => {
-      gsap.from(cards, {
-        opacity: 0,
-        y: 60,
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.15,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       id="about"
       className="skew-section py-24 md:py-32 lg:py-40"
     >
@@ -131,10 +99,7 @@ export default function TeamSection() {
           </h2>
         </div>
 
-        <div
-          ref={gridRef}
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
-        >
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {TEAM.map((member) => (
             <TeamCard key={member.name} member={member} />
           ))}

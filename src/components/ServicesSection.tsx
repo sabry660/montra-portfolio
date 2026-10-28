@@ -1,45 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SITE_CONTENT } from "@/data/siteContent";
 import { ArrowRight } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function ServicesSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!gridRef.current || !sectionRef.current) return;
-
-    const cards = gridRef.current.querySelectorAll(".service-card");
-
-    if (cards.length === 0) return;
-
-    const ctx = gsap.context(() => {
-      gsap.from(cards, {
-        opacity: 0,
-        y: 60,
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       id="services"
       className="skew-section py-24 md:py-32 lg:py-40"
       suppressHydrationWarning
@@ -61,13 +27,13 @@ export default function ServicesSection() {
           </h2>
         </div>
 
-        <div ref={gridRef} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {SITE_CONTENT.services && SITE_CONTENT.services.length > 0 ? (
             SITE_CONTENT.services.map((service, index) => (
               <div
                 key={index}
+                data-reveal="up"
                 className="service-card group relative border border-white/10 bg-white/[0.02] p-8 transition-all hover:border-accent/50 hover:bg-white/[0.04]"
-                style={{ opacity: 1 }}
               >
                 <div className="mb-4">
                   <span

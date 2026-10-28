@@ -24,7 +24,7 @@
   html {
     background-color: #0a0a0a;
     color: #f5f0e8;
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
 
   body {
@@ -102,40 +102,74 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(245, 240, 232, 0.5);
+    width: 1px;
+    height: 1px;
+    opacity: 0;
     pointer-events: none;
     z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    mix-blend-mode: difference;
+    transition: opacity 0.2s ease;
+  }
+
+  .custom-cursor::before,
+  .custom-cursor::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.25s ease, height 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .custom-cursor::before {
+    width: 7px;
+    height: 7px;
+    background-color: #ff4d00;
+  }
+
+  .custom-cursor::after {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(245, 240, 232, 0.75);
   }
 
   .custom-cursor-label {
     font-family: var(--font-body);
     font-size: 10px;
     font-weight: 600;
-    color: #f5f0e8;
+    color: #0a0a0a;
     opacity: 0;
     transition: opacity 0.2s ease;
     white-space: nowrap;
+    z-index: 1;
   }
 
   .custom-cursor.link-hover {
-    width: 40px;
-    height: 40px;
+    --cursor-ring-size: 46px;
+  }
+
+  .custom-cursor.link-hover::before {
+    width: 4px;
+    height: 4px;
+  }
+
+  .custom-cursor.link-hover::after {
+    width: var(--cursor-ring-size);
+    height: var(--cursor-ring-size);
     border-color: #ff4d00;
   }
 
   .custom-cursor.project-hover {
-    width: 50px;
-    height: 50px;
-    background-color: rgba(255, 77, 0, 0.3);
+    --cursor-ring-size: 76px;
+  }
+
+  .custom-cursor.project-hover::after {
+    width: var(--cursor-ring-size);
+    height: var(--cursor-ring-size);
+    background-color: rgba(255, 77, 0, 0.82);
     border-color: #ff4d00;
   }
 
@@ -144,8 +178,16 @@
   }
 
   .custom-cursor.text-hover {
-    width: 60px;
-    height: 60px;
+    --cursor-ring-size: 62px;
+  }
+
+  .custom-cursor.text-hover::before {
+    opacity: 0;
+  }
+
+  .custom-cursor.text-hover::after {
+    width: var(--cursor-ring-size);
+    height: var(--cursor-ring-size);
     background-color: #ff4d00;
     border-color: #ff4d00;
   }
@@ -669,9 +711,20 @@
     transform: translateY(-1px);
   }
 
-  /* ---- SKEW EFFECT ---- */
-  .skew-section {
-    will-change: transform;
+  /* ---- SCROLL REVEALS ---- */
+  [data-reveal-state="pending"] {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+
+  [data-reveal="fade"][data-reveal-state="pending"] {
+    transform: translate3d(0, 0, 0);
+  }
+
+  [data-reveal-state="visible"] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.2, 0.65, 0.3, 1);
   }
 
   /* ---- SERVICE CARDS ---- */

@@ -1,42 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SITE_CONTENT } from "@/data/siteContent";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function ProcessSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const stepsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!stepsRef.current || !sectionRef.current) return;
-
-    const steps = stepsRef.current.querySelectorAll(".process-step");
-
-    const ctx = gsap.context(() => {
-      gsap.from(steps, {
-        opacity: 0,
-        y: 60,
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.15,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       id="process"
       className="skew-section py-24 md:py-32 lg:py-40"
       suppressHydrationWarning
@@ -58,9 +26,9 @@ export default function ProcessSection() {
           </h2>
         </div>
 
-        <div ref={stepsRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {SITE_CONTENT.process.map((step) => (
-            <div key={step.step} className="process-step relative">
+            <div key={step.step} className="process-step relative" data-reveal="up">
               <div className="mb-4 flex items-center gap-4">
                 <span className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-accent text-xl font-bold text-accent">
                   {step.step}

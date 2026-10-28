@@ -40,15 +40,15 @@ const ProjectCard = memo(function ProjectCard({
   }, []);
 
   return (
-    <div className="project-card relative" data-cursor="project">
+    <div className="project-card relative" data-cursor="project" data-reveal="up">
       <div ref={imageRef} className="project-card-image project-card-image-reveal">
         <Image
           src={project.image}
           alt={project.title}
           fill
+          loading="eager"
           sizes="(max-width: 1023px) 100vw, 400px"
           className="object-cover"
-          unoptimized
         />
         <div className="project-card-image-overlay" />
       </div>

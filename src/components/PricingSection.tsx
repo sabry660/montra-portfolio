@@ -146,6 +146,7 @@ export default function PricingSection() {
           {SITE_CONTENT.packages.map((pkg) => (
             <div
               key={pkg.id}
+              data-reveal="up"
               className={`relative flex flex-col border p-8 transition-all ${
                 selectedPackage === pkg.id
                   ? "border-accent bg-accent/5"

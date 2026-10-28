@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.pexels.com" },
       { protocol: "https", hostname: "videos.pexels.com" },
     ],
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
   },
   experimental: {
     optimizePackageImports: ["lucide-react"],

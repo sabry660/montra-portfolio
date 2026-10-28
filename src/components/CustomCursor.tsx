@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useCursorStore } from "@/lib/cursor-store";
 import { isTouchDevice } from "@/lib/utils";
@@ -8,34 +8,37 @@ import { isTouchDevice } from "@/lib/utils";
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const { state, label } = useCursorStore();
-  const mousePos = useRef({ x: -100, y: -100 });
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    mousePos.current = { x: e.clientX, y: e.clientY };
-    if (cursorRef.current) {
-      gsap.to(cursorRef.current, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.4,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-    }
-  }, []);
-
   useEffect(() => {
     if (!isClient || isTouchDevice()) return;
 
-    window.addEventListener("mousemove", handleMouseMove);
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
+    const moveX = gsap.quickTo(cursor, "x", {
+      duration: 0.18,
+      ease: "power3.out",
+    });
+    const moveY = gsap.quickTo(cursor, "y", {
+      duration: 0.18,
+      ease: "power3.out",
+    });
+    const handlePointerMove = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      moveX(event.clientX);
+      moveY(event.clientY);
+      gsap.set(cursor, { autoAlpha: 1 });
+    };
 
     // Track hover states for interactive elements
     const handlePointerOver = (e: Event) => {
-      const target = e.target as HTMLElement;
+      const target = e.target;
+      if (!(target instanceof Element)) return;
       const closest = target.closest(
         "a, button, [data-cursor='link']"
       );
@@ -52,26 +55,30 @@ export default function CustomCursor() {
     };
 
     const handlePointerOut = (e: Event) => {
-      const target = e.target as HTMLElement;
-      const related = (e as MouseEvent).relatedTarget as HTMLElement | null;
+      const target = e.target;
+      if (!(target instanceof Element)) return;
+      const related = (e as PointerEvent).relatedTarget;
+      const relatedElement = related instanceof Node ? related : null;
       const interactive = target.closest(
         "a, button, [data-cursor='link'], [data-cursor='project'], [data-cursor='text']"
       );
 
-      if (interactive && (!related || !interactive.contains(related))) {
+      if (interactive && (!relatedElement || !interactive.contains(relatedElement))) {
         useCursorStore.getState().reset();
       }
     };
 
+    window.addEventListener("pointermove", handlePointerMove);
     document.addEventListener("pointerover", handlePointerOver);
     document.addEventListener("pointerout", handlePointerOut);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("pointerover", handlePointerOver);
       document.removeEventListener("pointerout", handlePointerOut);
+      gsap.killTweensOf(cursor);
     };
-  }, [handleMouseMove, isClient]);
+  }, [isClient]);
 
   if (!isClient || isTouchDevice()) return null;
 
@@ -85,7 +92,7 @@ export default function CustomCursor() {
           : "";
 
   return (
-    <div ref={cursorRef} className={`custom-cursor ${stateClass}`}>
+    <div ref={cursorRef} className={`custom-cursor ${stateClass}`} aria-hidden="true">
       {label && <span className="custom-cursor-label">{label}</span>}
     </div>
   );
